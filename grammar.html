@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammar Quiz - English Buddy</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#eef2ff,#f8fafc);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.quiz-container{
+    width:100%;
+    max-width:700px;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:20px;
+}
+
+.stats{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.question{
+    font-size:1.3rem;
+    margin-bottom:20px;
+}
+
+.options{
+    display:grid;
+    gap:12px;
+}
+
+.option{
+    padding:15px;
+    border:2px solid #dbeafe;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.option:hover{
+    background:#eff6ff;
+}
+
+.correct{
+    background:#dcfce7;
+    border-color:#16a34a;
+}
+
+.wrong{
+    background:#fee2e2;
+    border-color:#dc2626;
+}
+
+button{
+    margin-top:20px;
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.result{
+    text-align:center;
+    margin-top:20px;
+    font-size:1.2rem;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-container">
+
+    <h1>✍ Grammar Quiz</h1>
+
+    <div class="stats">
+        <span>Question: <span id="questionNo">1</span></span>
+        <span>Score: <span id="score">0</span></span>
+    </div>
+
+    <div class="question" id="question"></div>
+
+    <div class="options" id="options"></div>
+
+    <button id="nextBtn">Next Question</button>
+
+    <div class="result" id="result"></div>
+
+</div>
+
+<script>
+
+const quizData = [
+
+{
+question:"I ___ a student.",
+options:["am","is","are","be"],
+answer:"am"
+},
+
+{
+question:"She ___ to school every day.",
+options:["go","goes","going","gone"],
+answer:"goes"
+},
+
+{
+question:"They ___ playing football.",
+options:["is","am","are","be"],
+answer:"are"
+},
+
+{
+question:"He ___ completed his homework.",
+options:["have","has","had","having"],
+answer:"has"
+},
+
+{
+question:"We ___ dinner at 8 PM yesterday.",
+options:["eat","eats","ate","eaten"],
+answer:"ate"
+},
+
+{
+question:"The sun ___ in the east.",
+options:["rise","rises","rising","rose"],
+answer:"rises"
+},
+
+{
+question:"I have been waiting ___ two hours.",
+options:["for","since","from","at"],
+answer:"for"
+},
+
+{
+question:"She is better ___ mathematics.",
+options:["at","in","on","with"],
+answer:"at"
+},
+
+{
+question:"Choose the correct sentence.",
+options:[
+"He don't like tea",
+"He doesn't likes tea",
+"He doesn't like tea",
+"He not like tea"
+],
+answer:"He doesn't like tea"
+},
+
+{
+question:"If I ___ rich, I would travel the world.",
+options:["am","was","were","be"],
+answer:"were"
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl =
+document.getElementById("question");
+
+const optionsEl =
+document.getElementById("options");
+
+const scoreEl =
+document.getElementById("score");
+
+const questionNoEl =
+document.getElementById("questionNo");
+
+const resultEl =
+document.getElementById("result");
+
+const nextBtn =
+document.getElementById("nextBtn");
+
+function loadQuestion(){
+
+const q = quizData[currentQuestion];
+
+questionEl.textContent = q.question;
+
+questionNoEl.textContent =
+currentQuestion + 1;
+
+optionsEl.innerHTML = "";
+
+q.options.forEach(option => {
+
+const btn =
+document.createElement("div");
+
+btn.classList.add("option");
+
+btn.textContent = option;
+
+btn.addEventListener("click", () =>
+checkAnswer(btn, option));
+
+optionsEl.appendChild(btn);
+
+});
+
+}
+
+function checkAnswer(element, selected){
+
+const correct =
+quizData[currentQuestion].answer;
+
+const options =
+document.querySelectorAll(".option");
+
+options.forEach(opt =>
+opt.style.pointerEvents = "none");
+
+if(selected === correct){
+
+element.classList.add("correct");
+
+score++;
+
+scoreEl.textContent = score;
+
+}else{
+
+element.classList.add("wrong");
+
+options.forEach(opt => {
+
+if(opt.textContent === correct){
+
+opt.classList.add("correct");
+
+}
+
+});
+
+}
+
+}
+
+nextBtn.addEventListener("click", () => {
+
+currentQuestion++;
+
+if(currentQuestion < quizData.length){
+
+loadQuestion();
+
+}else{
+
+showResult();
+
+}
+
+});
+
+function showResult(){
+
+questionEl.style.display = "none";
+optionsEl.style.display = "none";
+nextBtn.style.display = "none";
+
+let percentage =
+((score / quizData.length) * 100).toFixed(0);
+
+resultEl.innerHTML = `
+🎉 Quiz Completed! <br><br>
+Your Score: ${score}/${quizData.length}<br>
+Percentage: ${percentage}%
+`;
+
+localStorage.setItem(
+"grammarScore",
+percentage
+);
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>

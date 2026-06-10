@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Games - English Buddy</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#dbeafe,#f8fafc);
+    padding:30px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:30px;
+}
+
+.game-card{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:25px;
+    box-shadow:0 10px 20px rgba(0,0,0,.1);
+}
+
+h2{
+    color:#1e40af;
+    margin-bottom:15px;
+}
+
+input{
+    padding:10px;
+    width:250px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    margin-top:10px;
+}
+
+button{
+    padding:10px 18px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.result{
+    margin-top:15px;
+    font-weight:bold;
+}
+
+.option{
+    background:#eff6ff;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.option:hover{
+    background:#dbeafe;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🎮 English Learning Games</h1>
+
+<!-- WORD SCRAMBLE -->
+
+<div class="game-card">
+<h2>🔤 Word Scramble</h2>
+
+<p>Unscramble this word:</p>
+
+<h3 id="scrambledWord">LEPPA</h3>
+
+<input type="text" id="scrambleInput" placeholder="Your Answer">
+
+<br>
+
+<button onclick="checkScramble()">
+Check Answer
+</button>
+
+<div class="result" id="scrambleResult"></div>
+</div>
+
+<!-- HANGMAN -->
+
+<div class="game-card">
+
+<h2>🎯 Hangman</h2>
+
+<p>Guess the hidden word:</p>
+
+<h3 id="hangmanWord">_ _ _ _ _ _ _ _</h3>
+
+<input type="text"
+id="hangmanInput"
+maxlength="1"
+placeholder="Letter">
+
+<br>
+
+<button onclick="guessLetter()">
+Guess
+</button>
+
+<div class="result" id="hangmanResult"></div>
+
+</div>
+
+<!-- SYNONYM MATCH -->
+
+<div class="game-card">
+
+<h2>😊 Synonym Match</h2>
+
+<p>Select the synonym of <b>Happy</b></p>
+
+<div class="option"
+onclick="checkSynonym('Joyful')">
+Joyful
+</div>
+
+<div class="option"
+onclick="checkSynonym('Sad')">
+Sad
+</div>
+
+<div class="option"
+onclick="checkSynonym('Angry')">
+Angry
+</div>
+
+<div class="result"
+id="synonymResult"></div>
+
+</div>
+
+<!-- ANTONYM MATCH -->
+
+<div class="game-card">
+
+<h2>🔄 Antonym Match</h2>
+
+<p>Select the antonym of <b>Big</b></p>
+
+<div class="option"
+onclick="checkAntonym('Small')">
+Small
+</div>
+
+<div class="option"
+onclick="checkAntonym('Large')">
+Large
+</div>
+
+<div class="option"
+onclick="checkAntonym('Huge')">
+Huge
+</div>
+
+<div class="result"
+id="antonymResult"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* WORD SCRAMBLE */
+
+const correctWord = "APPLE";
+
+function checkScramble(){
+
+const answer =
+document
+.getElementById("scrambleInput")
+.value
+.toUpperCase();
+
+const result =
+document
+.getElementById("scrambleResult");
+
+if(answer === correctWord){
+
+result.innerHTML =
+"✅ Correct!";
+
+}else{
+
+result.innerHTML =
+"❌ Try Again";
+
+}
+
+}
+
+
+/* HANGMAN */
+
+const hangmanAnswer =
+"CONFIDENCE";
+
+let guessedLetters = [];
+
+function updateHangman(){
+
+let display = "";
+
+for(let letter of hangmanAnswer){
+
+if(
+guessedLetters.includes(letter)
+){
+
+display += letter + " ";
+
+}else{
+
+display += "_ ";
+
+}
+
+}
+
+document
+.getElementById("hangmanWord")
+.textContent = display;
+
+if(!display.includes("_")){
+
+document
+.getElementById("hangmanResult")
+.innerHTML =
+"🎉 You Won!";
+
+}
+
+}
+
+function guessLetter(){
+
+const input =
+document
+.getElementById("hangmanInput");
+
+const letter =
+input.value.toUpperCase();
+
+if(letter){
+
+guessedLetters.push(letter);
+
+updateHangman();
+
+}
+
+input.value = "";
+
+}
+
+updateHangman();
+
+
+/* SYNONYM */
+
+function checkSynonym(answer){
+
+const result =
+document
+.getElementById("synonymResult");
+
+if(answer === "Joyful"){
+
+result.innerHTML =
+"✅ Correct!";
+
+}else{
+
+result.innerHTML =
+"❌ Wrong Answer";
+
+}
+
+}
+
+
+/* ANTONYM */
+
+function checkAntonym(answer){
+
+const result =
+document
+.getElementById("antonymResult");
+
+if(answer === "Small"){
+
+result.innerHTML =
+"✅ Correct!";
+
+}else{
+
+result.innerHTML =
+"❌ Wrong Answer";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

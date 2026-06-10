@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Practice - English Buddy</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#dbeafe,#f8fafc);
+    min-height:100vh;
+    padding:30px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.1);
+    margin-bottom:25px;
+}
+
+.topic{
+    font-size:1.3rem;
+    margin-bottom:15px;
+    color:#1e293b;
+}
+
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    color:white;
+    font-weight:600;
+    margin:5px;
+}
+
+.start-btn{
+    background:#16a34a;
+}
+
+.stop-btn{
+    background:#dc2626;
+}
+
+.speak-btn{
+    background:#2563eb;
+}
+
+.next-btn{
+    background:#7c3aed;
+}
+
+.output{
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    background:#f1f5f9;
+    min-height:100px;
+    line-height:1.7;
+}
+
+.score-box{
+    margin-top:15px;
+    font-weight:bold;
+    color:#16a34a;
+}
+
+.instructions{
+    line-height:1.8;
+}
+
+textarea{
+    width:100%;
+    height:120px;
+    margin-top:15px;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #cbd5e1;
+    resize:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🎤 Speaking Practice</h1>
+
+    <div class="card">
+        <h2>Today's Speaking Topic</h2>
+
+        <p class="topic" id="topic">
+            Introduce Yourself
+        </p>
+
+        <button class="next-btn" onclick="nextTopic()">
+            Next Topic
+        </button>
+    </div>
+
+    <div class="card">
+
+        <h2>Pronunciation Practice</h2>
+
+        <p id="practiceWord">
+            Confidence
+        </p>
+
+        <button class="speak-btn" onclick="speakWord()">
+            🔊 Listen Word
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Voice Practice</h2>
+
+        <button class="start-btn" onclick="startListening()">
+            🎙 Start Speaking
+        </button>
+
+        <button class="stop-btn" onclick="stopListening()">
+            ⏹ Stop
+        </button>
+
+        <div class="output" id="output">
+            Your speech will appear here...
+        </div>
+
+        <div class="score-box" id="feedback">
+            Speak clearly and confidently.
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Self Practice</h2>
+
+        <p class="instructions">
+            Write what you spoke and compare with
+            your voice transcript.
+        </p>
+
+        <textarea
+            placeholder="Write your answer here..."
+        ></textarea>
+
+    </div>
+
+</div>
+
+<script>
+
+// Speaking Topics
+const topics = [
+"Introduce Yourself",
+"My Family",
+"My Hometown",
+"My College",
+"My Best Friend",
+"My Goals",
+"My Dream Job",
+"My Hobbies",
+"My Daily Routine",
+"My Favorite Book",
+"My Favorite Movie",
+"My Favorite Teacher",
+"Why I Want To Learn English",
+"Why I Chose CSE",
+"My Internship Goals",
+"My Strengths",
+"My Weaknesses",
+"My Favorite Sport",
+"My Favorite Festival",
+"A Memorable Day in My Life",
+"My Future Plans",
+"Technology in Daily Life",
+"Importance of Education",
+"Benefits of Reading Books",
+"Social Media Advantages and Disadvantages",
+"My Favorite Subject",
+"A Person I Admire",
+"How to Stay Healthy",
+"Importance of Time Management",
+"My Career Objectives"
+];
+
+
+function nextTopic(){
+
+const randomIndex =
+Math.floor(Math.random() * topics.length);
+
+document.getElementById("topic").textContent =
+topics[randomIndex];
+
+}
+
+
+// Text To Speech
+
+function speakWord(){
+
+const word =
+document.getElementById(
+"practiceWord"
+).textContent;
+
+const speech =
+new SpeechSynthesisUtterance(word);
+
+speech.lang = "en-US";
+
+window.speechSynthesis.speak(speech);
+
+}
+
+
+// Speech Recognition
+
+let recognition;
+
+if(
+'webkitSpeechRecognition' in window
+){
+
+recognition =
+new webkitSpeechRecognition();
+
+recognition.continuous = true;
+
+recognition.interimResults = true;
+
+recognition.lang = "en-US";
+
+recognition.onresult = function(event){
+
+let transcript = "";
+
+for(
+let i=0;
+i<event.results.length;
+i++
+){
+
+transcript +=
+event.results[i][0].transcript;
+
+}
+
+document.getElementById(
+"output"
+).innerHTML = transcript;
+
+evaluateSpeech(transcript);
+
+};
+
+}else{
+
+alert(
+"Speech Recognition not supported in your browser."
+);
+
+}
+
+
+function startListening(){
+
+recognition.start();
+
+document.getElementById(
+"feedback"
+).textContent =
+"Listening... Speak now 🎤";
+
+}
+
+
+function stopListening(){
+
+recognition.stop();
+
+document.getElementById(
+"feedback"
+).textContent =
+"Practice completed ✅";
+
+}
+
+
+// Simple Feedback
+
+function evaluateSpeech(text){
+
+const words =
+text.trim().split(" ");
+
+let count =
+words.length;
+
+let feedback = "";
+
+if(count < 5){
+
+feedback =
+"Try speaking longer sentences.";
+
+}
+else if(count < 15){
+
+feedback =
+"Good! Try adding more details.";
+
+}
+else{
+
+feedback =
+"Excellent speaking practice!";
+
+}
+
+document.getElementById(
+"feedback"
+).textContent =
+feedback;
+
+}
+
+
+// Save Practice Count
+
+let practiceCount =
+Number(
+localStorage.getItem(
+"practiceCount"
+)
+) || 0;
+
+practiceCount++;
+
+localStorage.setItem(
+"practiceCount",
+practiceCount
+);
+
+</script>
+
+</body>
+</html>

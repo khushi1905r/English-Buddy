@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Buddy Chatbot</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#dbeafe,#f8fafc);
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.chat-container{
+    width:90%;
+    max-width:800px;
+    height:85vh;
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.chat-header{
+    background:#2563eb;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.chat-box{
+    height:70%;
+    overflow-y:auto;
+    padding:20px;
+    background:#f8fafc;
+}
+
+.message{
+    margin:10px 0;
+    padding:12px 15px;
+    border-radius:12px;
+    max-width:75%;
+}
+
+.user{
+    background:#2563eb;
+    color:white;
+    margin-left:auto;
+}
+
+.bot{
+    background:#e2e8f0;
+    color:#111827;
+}
+
+.input-area{
+    display:flex;
+    padding:15px;
+    gap:10px;
+    border-top:1px solid #e5e7eb;
+}
+
+input{
+    flex:1;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    font-size:16px;
+}
+
+button{
+    padding:12px 20px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+
+    <div class="chat-header">
+        <h2>🤖 English Buddy Chatbot</h2>
+        <p>Practice English Conversations</p>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+
+        <div class="message bot">
+            Hello! 👋 I'm English Buddy.
+            How can I help you improve your English today?
+        </div>
+
+    </div>
+
+    <div class="input-area">
+
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Type your message..."
+        >
+
+        <button onclick="sendMessage()">
+            Send
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const chatBox =
+document.getElementById("chatBox");
+
+function addMessage(text, sender){
+
+const msg =
+document.createElement("div");
+
+msg.classList.add("message");
+
+msg.classList.add(sender);
+
+msg.textContent = text;
+
+chatBox.appendChild(msg);
+
+chatBox.scrollTop =
+chatBox.scrollHeight;
+
+}
+
+function sendMessage(){
+
+const input =
+document.getElementById("userInput");
+
+const userText =
+input.value.trim();
+
+if(userText === "") return;
+
+addMessage(userText,"user");
+
+const botReply =
+getBotResponse(userText);
+
+setTimeout(()=>{
+
+addMessage(botReply,"bot");
+
+},500);
+
+input.value="";
+
+}
+
+function getBotResponse(message){
+
+message =
+message.toLowerCase();
+
+if(
+message.includes("hello") ||
+message.includes("hi")
+){
+return "Hello! How are you today?";
+}
+
+if(
+message.includes("how are you")
+){
+return "I'm doing great! How about you?";
+}
+
+if(
+message.includes("my name is")
+){
+return "Nice to meet you! Keep practicing your English.";
+}
+
+if(
+message.includes("english")
+){
+return "Practice speaking, reading, writing, and listening every day.";
+}
+
+if(
+message.includes("grammar")
+){
+return "Grammar becomes easier when you practice daily.";
+}
+
+if(
+message.includes("interview")
+){
+return "A good self-introduction is important for interviews.";
+}
+
+if(
+message.includes("thank you")
+){
+return "You're welcome! 😊";
+}
+
+if(
+message.includes("bye")
+){
+return "Goodbye! Keep learning English every day.";
+}
+
+/* Basic Grammar Corrections */
+
+if(
+message === "i goes to college"
+){
+return "✅ Correct Sentence: I go to college.";
+}
+
+if(
+message === "she go to school"
+){
+return "✅ Correct Sentence: She goes to school.";
+}
+
+if(
+message === "he don't like tea"
+){
+return "✅ Correct Sentence: He doesn't like tea.";
+}
+
+return "That's interesting! Tell me more about it in English.";
+
+}
+
+document
+.getElementById("userInput")
+.addEventListener("keypress",
+
+function(event){
+
+if(event.key === "Enter"){
+
+sendMessage();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
